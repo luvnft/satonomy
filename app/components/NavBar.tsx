@@ -6,8 +6,8 @@ export const NavBar = () => {
   return (
     <div className="mt-8 z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
       <p className="flex items-center justify-center gap-2 font-bold text-[24px]">
-        <Image src="/satonomy-logo.png" alt="Satonomy" width={40} height={40} />
-        SATONOMY
+        <Image src="/satonomy-logo.png" alt="Sat" width={40} height={40} />
+        SAT
       </p>
       <div className="flex items-center justify-center gap-3">
         <Tutorial />
