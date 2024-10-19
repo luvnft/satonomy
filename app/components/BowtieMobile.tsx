@@ -170,7 +170,7 @@ export const BowtieMobile = () => {
             false
           )} sats; it should be 0.`
       : "Create PSBT and sign"
-    : "No UTXOs"
+    : "No Bitcoin Assets (UTXOs)"
 
   return (
     <>

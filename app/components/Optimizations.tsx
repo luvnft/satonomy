@@ -166,7 +166,7 @@ export const Optimizations = () => {
               className="mt-[1px] cursor-help"
               data-tooltip-id={"Optimizations"}
               data-tooltip-content={
-                "Create a transaction that consolidates all of your UTXOs into one and extracts the locked sats. An examples: each mint a new 546 sats UTXO is created, if you minted 10 times, you would have 10 x 546 = 5460 sats locked. This optimization will consolidate all of those UTXOs into one of 546, pay the fees and extract the locked sats."
+                "Create a transaction that consolidates multiples UTXOs into one and extracts the locked sats. An examples: each mint a new 546 sats UTXO is created, if you minted 10 times, you would have 10 x 546 = 5460 sats locked. This optimization will consolidate all of those UTXOs into one of 546, pay the fees and extract the locked sats."
               }
               data-tooltip-place="right"
             />
@@ -189,7 +189,7 @@ export const Optimizations = () => {
                       No optimizations available
                     </span>
                     <span className="text-[10px]">
-                      You do not have enough UTXOs to optimize
+                      You do not have enough Bitcoin Assets (UTXOs) to optimize
                     </span>
                   </div>
                 </div>

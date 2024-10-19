@@ -71,7 +71,7 @@ export const EmptyCard = ({
               : `${
                   className
                     ? "Add a new output"
-                    : "Open the deck of UTXOs and select an Input"
+                    : "Open the deck of Bitcoin Assets (UTXOs) and select an Input"
                 }`
           }
           data-tooltip-place={className ? "left" : "right"}

@@ -120,7 +120,7 @@ export const Canvas = ({ children }: { children: React.ReactNode }) => {
       </div>
 
       <div
-        className={`fixed right-4 gap-4 hidden sm:flex z-1 ${
+        className={`fixed left-4 gap-4 hidden sm:flex z-1 ${
           isInputFullDeckOpen ? "top-[82px]" : "bottom-0"
         }`}
       >

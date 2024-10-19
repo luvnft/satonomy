@@ -32,7 +32,7 @@ export const ConfigDeck = () => {
   const setHistory = useSetRecoilState(historyAtom)
   const isDeckOpen = configs?.isInputDeckOpen || configs?.isOutputDeckOpen
   const { signPsbt } = useSignPsbt()
-  let position = isDeckOpen && utxos?.length ? "bottom-[356px]" : "bottom-[0px]"
+  let position = isDeckOpen && utxos?.length ? "bottom-[376px]" : "bottom-[0px]"
 
   const txIdHasError = psbtSigned.txid?.includes("error")
 
@@ -154,7 +154,7 @@ export const ConfigDeck = () => {
             false
           )} sats; it should be 0.`
       : "Create PSBT and sign"
-    : "No UTXOs"
+    : "No Bitcoin Assets (UTXOs)"
 
   const onClose = () => {
     setConfigs((prev) => ({
@@ -336,26 +336,20 @@ export const ConfigDeck = () => {
   }
 
   const onPortfolioClick = () => {
-    if (configs.isInputDeckOpen || configs.isOutputDeckOpen) {
-      setConfigs((prev) => ({
-        ...prev,
-        isInputDeckOpen: false,
-        isOutputDeckOpen: false,
-        isInputFullDeckOpen: true,
-      }))
+    track(
+      "portfolio",
+      {
+        wallet: account,
+        utxos: utxos?.length || 0,
+      },
+      { flags: ["portfolio"] }
+    )
 
-      return
-    }
-
-    track("portfolio", {}, { flags: ["portfolio"] })
     setConfigs((prev) => ({
       ...prev,
-      isInputFullDeckOpen:
-        (utxos?.length || 0) >= 20 || prev.isInputDeckOpen
-          ? !prev.isInputFullDeckOpen
-          : false,
-      isInputDeckOpen:
-        (utxos?.length || 0) < 20 ? !prev.isInputDeckOpen : false,
+      isInputDeckOpen: false,
+      isOutputDeckOpen: false,
+      isInputFullDeckOpen: true,
     }))
   }
 
@@ -433,11 +427,13 @@ export const ConfigDeck = () => {
 
       {Boolean(utxos?.length) && (
         <div
-          className={`transition-all duration-200 transform opacity-0 translate-y-4 animate-fade-slide w-[300px] rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 hover:bg-zinc-800 py-2 px-6 border-2 border-zinc-600 hover:border-zinc-500 cursor-pointer`}
+          className={` transition-all duration-200 transform opacity-0 translate-y-4 animate-fade-slide w-[300px] rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 hover:bg-zinc-800 py-2 px-6 border-2 border-zinc-600 hover:border-zinc-500 cursor-pointer ${
+            configs.isInputDeckOpen ? "hidden" : ""
+          }`}
           onClick={onPortfolioClick}
         >
           <div className="text-[12px] flex items-center justify-center opacity-50">
-            {utxos?.length} UTXOs
+            {utxos?.length} Assets
           </div>
           <div className="flex gap-2 justify-center items-center px-2">
             {configs.isInputFullDeckOpen ? (
@@ -494,7 +490,7 @@ export const ConfigDeck = () => {
         </div>
       )} */}
 
-      {Boolean(configs.feeCost) && isConfirmDisabled && (
+      {/* {Boolean(configs.feeCost) && isConfirmDisabled && (
         <div className="w-[160px] rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 py-2 px-4 border-2 border-zinc-600 hidden sm:flex flex-col opacity-50">
           <div className="text-[12px] flex items-center justify-center opacity-50 whitespace-nowrap">
             Balance
@@ -519,7 +515,7 @@ export const ConfigDeck = () => {
             </div>
           )}
         </div>
-      )}
+      )} */}
 
       {Boolean(configs.feeCost) && (
         <>
@@ -535,7 +531,7 @@ export const ConfigDeck = () => {
             className="max-w-[250px] bg-gray-600"
             style={{ backgroundColor: "#292929", color: "white" }}
           />
-          {!allTxIsSigned && userCanSign && (
+          {!allTxIsSigned && userCanSign && !configs.isInputFullDeckOpen && (
             <button
               data-tooltip-id={"confirm-2"}
               data-tooltip-content={confirmTooltip}

@@ -169,7 +169,7 @@ export const AirdropRunes = () => {
                     No runes available
                   </span>
                   <span className="text-[10px]">
-                    You do not have enough UTXOs to Airdrop
+                    You do not have enough Bitcoin Assets to Airdrop
                   </span>
                 </div>
               </div>
