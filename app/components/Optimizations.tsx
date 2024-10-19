@@ -69,20 +69,16 @@ export const Optimizations = () => {
 
     const runesOptimizations = runes?.filter(
       (r) =>
-        r.utxos?.length >= 5 &&
+        r.utxos?.length >= 5 ||
         r.utxos.find(
           (u) =>
             (utxos?.find((utxo) => u.location === `${utxo.txid}:${utxo.vout}`)
-              ?.value || 0) > 546
+              ?.value || 0) > 2730
         )
     )
 
     if (runesOptimizations) {
-      const hasSavedOnLocalStorage = localStorage.getItem("runesOptimizations")
-      if (!hasSavedOnLocalStorage) {
-        localStorage.setItem("runesOptimizations", "saved")
-        setIsOpen(true)
-      }
+      localStorage.setItem("runesOptimizations", "saved")
       setRunesOptimizations(runesOptimizations)
     }
   }, [runes, ordinals, utxos])
@@ -92,6 +88,14 @@ export const Optimizations = () => {
     setOptimizationSelected(true)
   }
 
+  useEffect(() => {
+    if (!optimizationSelected) {
+      const isSaved = localStorage.getItem("runesOptimizations")
+      if (isSaved) {
+        setOptimizationSelected(Boolean(isSaved))
+      }
+    }
+  }, [])
   const [referralUrl, setReferralUrl] = useState("")
 
   useEffect(() => {

@@ -11,7 +11,6 @@ import { MempoolUTXO, utxoAtom } from "@/app/recoil/utxoAtom"
 
 import { formatNumber } from "@/app/utils/format"
 import { useAccounts } from "@particle-network/btc-connectkit"
-import { track } from "@vercel/analytics"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
@@ -45,7 +44,6 @@ export const OptimizationOrdinals = ({
 
   const [profit, setProfit] = useState<number>(profitMocked)
   const profitInSats = profit
-  console.log("✌️profitInSats --->", profitInSats)
   const profitInUsd = (profit / 100000000) * btcUsdPrice
 
   const selectedFeeRate = configs.feeRate || recommendedFeeRate?.hourFee
@@ -82,8 +80,6 @@ export const OptimizationOrdinals = ({
     }
 
     const charge = allBtcInputsValue - 546 - feeCost
-    console.log("✌️feeCost --->", feeCost)
-    console.log("✌️allBtcInputsValue --->", allBtcInputsValue)
 
     const usersProfit = Math.floor(charge * 0.8)
     const platformFee = Math.floor(charge - usersProfit)

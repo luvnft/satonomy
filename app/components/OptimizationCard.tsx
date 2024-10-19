@@ -37,7 +37,7 @@ export const OptimizationCard = ({
   const [feeCost, setFeeCost] = useState<number>(500)
   const { referrer } = useParams()
 
-  const selectedFeeRate = configs.feeRate || recommendedFeeRate?.hourFee
+  const selectedFeeRate = configs.feeRate || 3
 
   const profitMocked = length * 546 - feeCost - 546
 

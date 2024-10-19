@@ -135,7 +135,7 @@ export const AirdropRunes = () => {
                   height={14}
                   className="mt-[1px] cursor-help"
                   data-tooltip-id={"Optimizations"}
-                  data-tooltip-content={"Create one airdrop of Runes."}
+                  data-tooltip-content={"This feature is in beta."}
                   data-tooltip-place="right"
                 />
               </h2>
