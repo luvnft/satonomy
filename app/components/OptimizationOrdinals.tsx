@@ -45,6 +45,7 @@ export const OptimizationOrdinals = ({
 
   const [profit, setProfit] = useState<number>(profitMocked)
   const profitInSats = profit
+  console.log("✌️profitInSats --->", profitInSats)
   const profitInUsd = (profit / 100000000) * btcUsdPrice
 
   const selectedFeeRate = configs.feeRate || recommendedFeeRate?.hourFee
@@ -81,6 +82,8 @@ export const OptimizationOrdinals = ({
     }
 
     const charge = allBtcInputsValue - 546 - feeCost
+    console.log("✌️feeCost --->", feeCost)
+    console.log("✌️allBtcInputsValue --->", allBtcInputsValue)
 
     const usersProfit = Math.floor(charge * 0.8)
     const platformFee = Math.floor(charge - usersProfit)
@@ -160,7 +163,7 @@ export const OptimizationOrdinals = ({
         })
         const result = await res.json()
 
-        if (!result?.error) {
+        if (result && !result?.error) {
           setFeeCost(result)
 
           const charge = allBtcInputsValue - 546 - result
@@ -266,8 +269,8 @@ export const OptimizationOrdinals = ({
 
   return (
     <button
-      data-tooltip-id={"Optimizations"}
-      data-tooltip-content={"Coming Soon"}
+      data-tooltip-id={"Extract locked sats"}
+      data-tooltip-content={"Extract ordinal"}
       data-tooltip-place="right"
       className={` flex justify-start items-start w-full h-full border p-2  ${
         !Boolean(profitInSats) || !Boolean(profitInUsd)

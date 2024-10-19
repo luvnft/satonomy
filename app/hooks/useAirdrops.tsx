@@ -197,7 +197,7 @@ export const useAirdrops = ({
     }
   }, [feeCost, utxos, selectedFeeRate, airdropSelected, csvData])
 
-  const handleConfirmAirdrop = () => {
+  const handleConfirmAirdrop = (onClose?: () => void) => {
     const totalAmountToAirdrop = csvData.reduce(
       (acc, curr) => acc + curr.amount,
       0
@@ -363,6 +363,7 @@ export const useAirdrops = ({
       inputs: inputs,
       outputs: outputs,
     })
+    onClose?.()
   }
 
   return { errorMsg, handleConfirmAirdrop, setErrorMsg, feeCost }

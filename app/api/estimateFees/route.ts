@@ -38,15 +38,12 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    return NextResponse.json(
-      {},
-      {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    return NextResponse.json(false, {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   } catch (error) {
     console.error("Internal Server Error:", error)
     return NextResponse.json(

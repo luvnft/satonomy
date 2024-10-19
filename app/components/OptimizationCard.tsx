@@ -68,7 +68,6 @@ export const OptimizationCard = ({
 
     const usersProfit = Math.floor(charge * 0.8)
     const platformFee = Math.floor(charge - usersProfit)
-
     setProfit(usersProfit)
 
     const fetchFees = async () => {

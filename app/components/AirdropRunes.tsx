@@ -110,7 +110,7 @@ export const AirdropRunes = () => {
             className="flex gap-2 cursor-pointer -mt-4"
             onClick={() => setIsOpen(true)}
           >
-            <span className="opacity-50 border-[1px] border-zinc-600 hover:text-white  px-3 py-2 -mr-3  rounded hover:border-white hover:opacity-100 hover:scale-105 font-bold transition-all duration-300">
+            <span className="opacity-50 hover:border-b-[1px] border-zinc-600 hover:text-white  px-3 py-2 -mr-3   hover:border-white hover:opacity-100 hover:scale-105 font-bold transition-all duration-200">
               Airdrop
             </span>{" "}
           </div>
@@ -141,7 +141,7 @@ export const AirdropRunes = () => {
               </h2>
 
               <p className="mb-4 text-zinc-200 text-[12px]">
-                Multi-transfer runes all in one transaction
+                Multiple Rune transfers in a single transaction.
               </p>
             </>
           )}
@@ -192,7 +192,8 @@ export const AirdropRunes = () => {
 
           {Boolean(airdropSelected) && (
             <div className="flex items-center justify-center mt-4 flex-col">
-              {(csvData?.length === 0 || Boolean(errorMsg)) && (
+              {(csvData?.length === 0 ||
+                Boolean(errorMsg === "Wrong format in the file")) && (
                 <>
                   <div className="mt-4 text-center">
                     Upload one spreadsheet containing the wallets and amounts of
@@ -229,46 +230,48 @@ export const AirdropRunes = () => {
                 </div>
               )}
 
-              {csvData?.length > 0 && (
-                <>
-                  <div className="border-b-[1px] w-full mt-4 " />
-                  <div className=" text-left  w-[400px] max-h-[250px] overflow-y-scroll scrollbar ">
-                    {csvData.map((item, index) => (
-                      <div key={index} className="flex justify-between">
-                        <span>{formatAddress(item.address)}</span>{" "}
-                        <span>
-                          {item.amount} {airdropSelected?.symbol}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="border-b-[1px] w-full" />
-                </>
-              )}
+              {csvData?.length > 0 &&
+                Boolean(errorMsg !== "Wrong format in the file") && (
+                  <>
+                    <div className="border-b-[1px] w-full mt-4 " />
+                    <div className=" text-left  w-[400px] max-h-[250px] overflow-y-scroll scrollbar ">
+                      {csvData.map((item, index) => (
+                        <div key={index} className="flex justify-between">
+                          <span>{formatAddress(item.address)}</span>{" "}
+                          <span>
+                            {item.amount} {airdropSelected?.symbol}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="border-b-[1px] w-full" />
+                  </>
+                )}
 
-              {Boolean(csvData?.length) && (
-                <div className="w-full mt-4 flex items-center justify-between flex-col">
-                  <div className="w-full mt-1 flex items-center justify-between px-2">
-                    <div>Wallets</div>
-                    <div>{formatNumber(csvData?.length)}</div>
-                  </div>
-                  <div className="w-full mt-1 flex items-center justify-between px-2">
-                    <div>Runes</div>
-                    <div>
-                      {csvData?.reduce((acc, curr) => acc + curr.amount, 0)}{" "}
-                      {airdropSelected?.symbol}
+              {Boolean(csvData?.length) &&
+                Boolean(errorMsg !== "Wrong format in the file") && (
+                  <div className="w-full mt-4 flex items-center justify-between flex-col">
+                    <div className="w-full mt-1 flex items-center justify-between px-2">
+                      <div>Wallets</div>
+                      <div>{formatNumber(csvData?.length)}</div>
+                    </div>
+                    <div className="w-full mt-1 flex items-center justify-between px-2">
+                      <div>Runes</div>
+                      <div>
+                        {csvData?.reduce((acc, curr) => acc + curr.amount, 0)}{" "}
+                        {airdropSelected?.symbol}
+                      </div>
+                    </div>
+                    <div className="w-full mt-1 flex items-center justify-between px-2">
+                      <div>Locked </div>
+                      <div> {formatNumber(csvData?.length * 546)} sats</div>
+                    </div>
+                    <div className="w-full mt-1 flex items-center justify-between px-2">
+                      <div>Network Fees </div>
+                      <div> {formatNumber(feeCost)} sats</div>
                     </div>
                   </div>
-                  <div className="w-full mt-1 flex items-center justify-between px-2">
-                    <div>Locked </div>
-                    <div> {formatNumber(csvData?.length * 546)} sats</div>
-                  </div>
-                  <div className="w-full mt-1 flex items-center justify-between px-2">
-                    <div>Network Fees </div>
-                    <div> {formatNumber(feeCost)} sats</div>
-                  </div>
-                </div>
-              )}
+                )}
             </div>
           )}
 
@@ -294,8 +297,7 @@ export const AirdropRunes = () => {
               <div className=" flex justify-center items-center m-1 ">
                 <button
                   onClick={() => {
-                    onClose()
-                    handleConfirmAirdrop()
+                    handleConfirmAirdrop(onClose)
                   }}
                   className="gradient-border border-[1px] px-8 py-2 cursor-pointer hover:scale-105 hover:text-zinc-300 rounded my-2 font-bold"
                 >
