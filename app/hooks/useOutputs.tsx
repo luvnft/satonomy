@@ -68,6 +68,11 @@ export const useOutputs = ({
 
     const hasAnimations = i < 20 && butterfly?.outputs?.length < 100
 
+    const hasNegativeValues =
+      (butterfly.outputs[i]?.value || 0) < 0 ||
+      (butterfly.outputs[i]?.runesValue &&
+        (butterfly.outputs[i]?.runesValue || 0) < 0)
+
     if (hasAnimations) {
       paths.push(
         <svg
@@ -91,8 +96,11 @@ export const useOutputs = ({
                 style={{ stopColor: stop2Color, stopOpacity: 1 }}
               />
               <stop
-                offset="100%"
-                style={{ stopColor: stop1Color, stopOpacity: 1 }}
+                offset={hasNegativeValues ? "50%" : "100%"}
+                style={{
+                  stopColor: hasNegativeValues ? "#EF4444" : stop1Color,
+                  stopOpacity: 1,
+                }}
               />
             </linearGradient>
           </defs>
@@ -135,7 +143,10 @@ export const useOutputs = ({
           >
             <stop
               offset="0%"
-              style={{ stopColor: stop2Color, stopOpacity: 1 }}
+              style={{
+                stopColor: hasNegativeValues ? "#EF4444" : stop2Color,
+                stopOpacity: 1,
+              }}
             />
             <stop
               offset="100%"
