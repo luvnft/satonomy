@@ -472,7 +472,12 @@ export const ConfigDeck = () => {
             )}
 
             {!hasWalletLoading && (
-              <Image src="/wallet.png" alt="Arrow" width={16} height={16} />
+              <Image
+                src="/card-games-3.png"
+                alt="UTXO Deck of Cards"
+                width={20}
+                height={20}
+              />
             )}
           </div>
         </div>

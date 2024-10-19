@@ -32,7 +32,6 @@ export const AirdropRunes = () => {
   const [csvData, setCsvData] = useState<CSVData[]>([])
   const [runesToAirdrop, setRunesToAirdrop] = useState<RunesUtxo[] | []>([])
   const [isOpen, setIsOpen] = useState(false)
-  const butterfly = useRecoilValue(butterflyAtom)
 
   const { errorMsg, setErrorMsg, handleConfirmAirdrop, feeCost } = useAirdrops({
     csvData,
@@ -200,7 +199,7 @@ export const AirdropRunes = () => {
                     runes for each user in each row separated by a comma.
                   </div>
                   <div className="flex items-center justify-center gap-4 mt-4 mb-4">
-                    <p className="mt-4 opacity-40">File structure </p>
+                    <p className="mt-4 opacity-40">.csv example: </p>
                     <div className="opacity-50 border-[1px] px-4 py-2 mt-2">
                       <div className="text-center">bc1p...abc, 1000</div>
                       <div className="text-center">bc1p...cba, 1000</div>
@@ -221,6 +220,12 @@ export const AirdropRunes = () => {
                         : "border-zinc-300"
                     }`}
                   />
+                </div>
+              )}
+
+              {!Boolean(csvData?.length) && (
+                <div className="my-4 w-full flex items-center justify-center flex-col text-red-400 opacity-50">
+                  Max 10 wallets per transaction
                 </div>
               )}
 

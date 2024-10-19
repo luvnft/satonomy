@@ -40,7 +40,7 @@ export const useAirdrops = ({
         const utxosWithBtcOnly = []
         let accumulatedBtcValue = 0
 
-        const utxosFound: RuneTransaction[] = []
+        const runesUtxoFound: RuneTransaction[] = []
         let accumulatedBalance = 0
 
         for (const btcUtxo of utxos || []) {
@@ -81,7 +81,7 @@ export const useAirdrops = ({
             )
 
             if (matchedUtxo) {
-              utxosFound.push(r) // Add the current UTXO to the list
+              runesUtxoFound.push(r) // Add the current UTXO to the list
               accumulatedBalance += Number(r.formattedBalance) // Add the UTXO balance to accumulated total
 
               // If the accumulated balance is equal or greater than the total amount needed, stop
@@ -93,7 +93,7 @@ export const useAirdrops = ({
         }
 
         const mempoolUTXOs = utxos?.filter((mempoolUtxo) =>
-          utxosFound?.find(
+          runesUtxoFound?.find(
             (uf) => uf.location === `${mempoolUtxo.txid}:${mempoolUtxo.vout}`
           )
         )
@@ -207,7 +207,7 @@ export const useAirdrops = ({
     const utxosWithBtcOnly = []
     let accumulatedBtcValue = 0
 
-    const utxosFound: RuneTransaction[] = []
+    const runesUtxoFound: RuneTransaction[] = []
     let accumulatedBalance = 0
 
     for (const btcUtxo of utxos || []) {
@@ -245,10 +245,8 @@ export const useAirdrops = ({
         )
 
         if (matchedUtxo) {
-          utxosFound.push(r) // Add the current UTXO to the list
-          accumulatedBalance += Number(r.formattedBalance) // Add the UTXO balance to accumulated total
-
-          // If the accumulated balance is equal or greater than the total amount needed, stop
+          runesUtxoFound.push(r)
+          accumulatedBalance += Number(r.formattedBalance)
           if (accumulatedBalance >= totalAmountToAirdrop) {
             break
           }
@@ -257,7 +255,7 @@ export const useAirdrops = ({
     }
 
     const mempoolUTXOs = utxos?.filter((mempoolUtxo) =>
-      utxosFound?.find(
+      runesUtxoFound?.find(
         (uf) => uf.location === `${mempoolUtxo.txid}:${mempoolUtxo.vout}`
       )
     )
