@@ -78,7 +78,10 @@ export const AirdropRunes = () => {
           skipEmptyLines: true,
           complete: (results) => {
             const parsedData = results.data as string[][]
-            const formattedData = parsedData.map((row) => {
+            const formattedData = parsedData.map((row, index) => {
+              if (index > 10) {
+                setErrorMsg("Max 10 wallets per transaction")
+              }
               if (!parseFloat(row[1]) || !row[0]) {
                 setErrorMsg("Wrong format in the file")
               }
