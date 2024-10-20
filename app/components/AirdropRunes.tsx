@@ -297,15 +297,18 @@ export const AirdropRunes = () => {
               </div>
             )}
             {csvData?.length >= 1 && !Boolean(errorMsg) && (
-              <div className=" flex justify-center items-center m-1 ">
+              <div className=" flex justify-center items-center m-1 flex-col">
                 <button
+                  disabled
                   onClick={() => {
                     handleConfirmAirdrop(onClose)
                   }}
-                  className="gradient-border border-[1px] px-8 py-2 cursor-pointer hover:scale-105 hover:text-zinc-300 rounded my-2 font-bold"
+                  className="opacity-50 flex flex-col justify-center items-center gradient-border border-[1px] px-8 py-2 cursor-pointer hover:scale-105 hover:text-zinc-300 rounded my-2 font-bold"
                 >
-                  NEXT
+                  <span>NEXT</span>
                 </button>
+
+                <span className="text-[8px] opacity-50">COMING SOON</span>
               </div>
             )}
           </div>
