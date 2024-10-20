@@ -52,14 +52,15 @@ export const Bowtie = () => {
   useLocalSettings()
   useKeyboards()
 
+  const { accounts } = useAccounts()
+
   const utxos = useRecoilValue(utxoAtom)
-  const [configs, setConfigs] = useRecoilState(configsAtom)
-  const [butterfly, setButterfly] = useRecoilState(butterflyAtom)
-  const [psbtSigned, setPsbtSigned] = useRecoilState(psbtSignedAtom)
   const runes = useRecoilValue(runesAtom)
   const ordinals = useRecoilValue(ordinalsAtom)
 
-  const { accounts } = useAccounts()
+  const [configs, setConfigs] = useRecoilState(configsAtom)
+  const [butterfly, setButterfly] = useRecoilState(butterflyAtom)
+  const [psbtSigned, setPsbtSigned] = useRecoilState(psbtSignedAtom)
 
   const account = accounts.length > 1 ? accounts[1] : accounts[0]
   const inputsCount = butterfly.inputs.length
@@ -67,8 +68,6 @@ export const Bowtie = () => {
 
   const height = 320
   const inputHeight = 320 * inputsCount
-  const outputHeight = 320 * outputsCount
-  const totalHeight = Math.max(inputHeight, outputHeight)
 
   const onAddInput = () => {
     const isConnected = Boolean(account)
@@ -166,13 +165,6 @@ export const Bowtie = () => {
           address: walletForOutput,
         },
       ],
-    }))
-  }
-
-  const onRemoveOutput = (index: number) => {
-    setButterfly((prev) => ({
-      ...prev,
-      outputs: prev.outputs.filter((_, key) => key !== index),
     }))
   }
 

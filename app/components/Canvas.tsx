@@ -103,7 +103,7 @@ export const Canvas = ({ children }: { children: React.ReactNode }) => {
         cursor: proMode && isPanning ? "grabbing" : proMode ? "grab" : "auto",
         position: "relative",
       }}
-      className="hidden sm:block scrollbar z-99"
+      className="hidden sm:block scrollbar z-0"
     >
       <div
         className="flex justify-center z-0"

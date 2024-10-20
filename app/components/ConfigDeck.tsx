@@ -32,7 +32,7 @@ export const ConfigDeck = () => {
   const setHistory = useSetRecoilState(historyAtom)
   const isDeckOpen = configs?.isInputDeckOpen || configs?.isOutputDeckOpen
   const { signPsbt } = useSignPsbt()
-  let position = isDeckOpen && utxos?.length ? "bottom-[376px]" : "bottom-[0px]"
+  let position = isDeckOpen && utxos?.length ? "bottom-[356px]" : "bottom-[0px]"
 
   const txIdHasError = psbtSigned.txid?.includes("error")
 
@@ -355,7 +355,8 @@ export const ConfigDeck = () => {
 
   return (
     <div
-      className={`z-10 fixed flex gap-2 ${position} w-full items-center justify-center`}
+      style={{ zIndex: 99 }}
+      className={` fixed flex gap-2 ${position} w-full items-center justify-center`}
     >
       {Boolean(utxos?.length) &&
         (isDeckOpen || configs.isInputFullDeckOpen) && (
@@ -368,7 +369,7 @@ export const ConfigDeck = () => {
                 isInputFullDeckOpen: false,
               }))
             }
-            className="mb-[-14px] absolute left-2 rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 py-2 px-4 border-2 border-b-0 border-zinc-600 flex flex-col cursor-pointer hover:bg-zinc-800 hover:border-zinc-500 transition-all duration-200 transform opacity-0 translate-y-4 animate-fade-slide"
+            className="z-[-1] h-16 mb-[-14px] absolute left-2 rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 py-2 px-4 border-2 border-b-0 border-zinc-600 flex flex-col cursor-pointer hover:bg-zinc-800 hover:border-zinc-500 transition-all duration-200 transform opacity-0 translate-y-4 animate-fade-slide"
           >
             ↓
           </div>

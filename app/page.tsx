@@ -12,8 +12,9 @@ import { Canvas } from "@/app/components/Canvas"
 export default function Home() {
   return (
     <MultiProvider>
+      <ConfigDeck />
       <NavBar />
-      <div className="w-full max-w-[1200px] flex flex-col items-center sm:block">
+      <div className="z-0 w-full max-w-[1200px] flex flex-col items-center sm:block">
         <SubNavBar />
 
         <BowtieMobile />
@@ -23,7 +24,6 @@ export default function Home() {
           <Bowtie />
         </div>
       </Canvas>
-      <ConfigDeck />
       <UtxoDeck />
       <OutputDeck />
     </MultiProvider>
