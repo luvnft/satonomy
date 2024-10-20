@@ -72,26 +72,30 @@ export const Optimizations = () => {
         r.utxos?.length >= 5 ||
         r.utxos.find(
           (u) =>
-            utxos?.find((utxo) => u.location === `${utxo.txid}:${utxo.vout}`)
-              ?.value || 0 > 546
+            (utxos?.find((utxo) => u.location === `${utxo.txid}:${utxo.vout}`)
+              ?.value || 0) > 2730
         )
     )
 
     if (runesOptimizations) {
-      const hasSavedOnLocalStorage = localStorage.getItem("runesOptimizations")
-      if (!hasSavedOnLocalStorage) {
-        localStorage.setItem("runesOptimizations", "saved")
-        setIsOpen(true)
-      }
+      localStorage.setItem("runesOptimizations", "saved")
       setRunesOptimizations(runesOptimizations)
     }
-  }, [runes, ordinals, utxos]) // Dependencies
+  }, [runes, ordinals, utxos])
 
   const [optimizationSelected, setOptimizationSelected] = useState(false)
   const onOptimizeSelection = () => {
     setOptimizationSelected(true)
   }
 
+  useEffect(() => {
+    if (!optimizationSelected) {
+      const isSaved = localStorage.getItem("runesOptimizations")
+      if (isSaved) {
+        setOptimizationSelected(Boolean(isSaved))
+      }
+    }
+  }, [])
   const [referralUrl, setReferralUrl] = useState("")
 
   useEffect(() => {
@@ -134,8 +138,8 @@ export const Optimizations = () => {
             className="flex gap-2 cursor-pointer -mt-4"
             onClick={() => setIsOpen(true)}
           >
-            <span className="opacity-50 border-[1px] border-zinc-600 hover:text-white  px-3 py-2 -mr-3  rounded hover:border-white hover:opacity-100 hover:scale-105 font-bold transition-all duration-300">
-              Optimize
+            <span className="opacity-50 hover:border-b-[1px] border-zinc-600 hover:text-white  px-3 py-2 -mr-3  hover:border-white hover:opacity-100 hover:scale-105 font-bold transition-all duration-200">
+              Extract
             </span>{" "}
             <span className="relative flex h-3 w-3">
               {Boolean(runesOptimizations?.length) && !optimizationSelected && (
@@ -150,14 +154,14 @@ export const Optimizations = () => {
       }
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <div className="max-h-[600px] overflow-y-auto no-scrollbar sm:w-[420px]">
+        <div className="max-h-[600px] overflow-y-auto no-scrollbar sm:w-[440px]">
           <Tooltip
             id={"Optimizations"}
             className="max-w-[300px] bg-gray-600"
             style={{ backgroundColor: "#292929", color: "white" }}
           />
           <h2 className="text-[20px] font-bold mb-4 flex gap-2">
-            Optimizations{" "}
+            Extract locked sats{" "}
             <Image
               src="/info.svg"
               alt="Help"
@@ -166,15 +170,15 @@ export const Optimizations = () => {
               className="mt-[1px] cursor-help"
               data-tooltip-id={"Optimizations"}
               data-tooltip-content={
-                "Create a transaction that consolidates all of your UTXOs into one and extracts the locked sats. An examples: each mint a new 546 sats UTXO is created, if you minted 10 times, you would have 10 x 546 = 5460 sats locked. This optimization will consolidate all of those UTXOs into one of 546, pay the fees and extract the locked sats."
+                "Create a transaction that consolidates multiples UTXOs into one and extracts the locked sats. An examples: each mint a new 546 sats UTXO is created, if you minted 10 times, you would have 10 x 546 = 5460 sats locked. This optimization will consolidate all of those UTXOs into one of 546, pay the fees and extract the locked sats."
               }
               data-tooltip-place="right"
             />
           </h2>
 
           <p className="mb-4 text-zinc-200 text-[12px]">
-            Extract locked sats. Keep the same amount of ordinals and runes
-            merging into a smaller UTXO.
+            Keep the same amount of ordinals and runes merging into a smaller
+            UTXO.
           </p>
 
           {Boolean(!runesOptimizations.length) &&
@@ -189,7 +193,7 @@ export const Optimizations = () => {
                       No optimizations available
                     </span>
                     <span className="text-[10px]">
-                      You do not have enough UTXOs to optimize
+                      You do not have enough Bitcoin Assets (UTXOs) to optimize
                     </span>
                   </div>
                 </div>

@@ -49,7 +49,7 @@ export default function RootLayout({
     <html lang="en">
       <Analytics />
       <body className={inter.className}>
-        <main className="flex min-h-screen flex-col items-center justify-start">
+        <main className="relative flex min-h-screen flex-col items-center justify-start">
           {children}
           <ToastContainer />
         </main>

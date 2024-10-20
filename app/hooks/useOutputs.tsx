@@ -29,6 +29,10 @@ export const useOutputs = ({
   const outputY = inputHeight / 2
 
   for (let i = 0; i < outputsCount; i++) {
+    if (i > 50) {
+      continue
+    }
+
     const isOpReturn = butterfly.outputs[i].type === "OP RETURN"
 
     if (isOpReturn) {
@@ -62,7 +66,14 @@ export const useOutputs = ({
         : "#FAF22E"
     const stroke = isEven && mode === i ? stop2Color : `url(#gradient-2-${i})`
 
-    if (butterfly?.outputs?.length < 20) {
+    const hasAnimations = i < 20 && butterfly?.outputs?.length < 100
+
+    const hasNegativeValues =
+      (butterfly.outputs[i]?.value || 0) < 0 ||
+      (butterfly.outputs[i]?.runesValue &&
+        (butterfly.outputs[i]?.runesValue || 0) < 0)
+
+    if (hasAnimations) {
       paths.push(
         <svg
           key={`i-${i}`}
@@ -85,8 +96,11 @@ export const useOutputs = ({
                 style={{ stopColor: stop2Color, stopOpacity: 1 }}
               />
               <stop
-                offset="100%"
-                style={{ stopColor: stop1Color, stopOpacity: 1 }}
+                offset={hasNegativeValues ? "50%" : "100%"}
+                style={{
+                  stopColor: hasNegativeValues ? "#EF4444" : stop1Color,
+                  stopOpacity: 1,
+                }}
               />
             </linearGradient>
           </defs>
@@ -106,10 +120,15 @@ export const useOutputs = ({
         </svg>
       )
     }
+
     paths.push(
       <svg
         key={i}
-        className="absolute top-0 left-0 w-full h-full z-[-1] grow-in-left-to-right svg-transition-left-to-right"
+        className={`absolute top-0 left-0 w-full h-full z-[-1] ${
+          hasAnimations
+            ? "grow-in-left-to-right svg-transition-left-to-right"
+            : ""
+        }`}
         xmlns="http://www.w3.org/2000/svg"
         viewBox={`0 0 200 ${totalHeight}`}
         overflow={"visible"}
@@ -124,7 +143,10 @@ export const useOutputs = ({
           >
             <stop
               offset="0%"
-              style={{ stopColor: stop2Color, stopOpacity: 1 }}
+              style={{
+                stopColor: hasNegativeValues ? "#EF4444" : stop2Color,
+                stopOpacity: 1,
+              }}
             />
             <stop
               offset="100%"
@@ -137,7 +159,11 @@ export const useOutputs = ({
           stroke={stroke}
           strokeWidth={strangenessAdjusted}
           fill="none"
-          className="grow-in-left-to-right svg-transition-left-to-right"
+          className={
+            hasAnimations
+              ? "grow-in-left-to-right svg-transition-left-to-right"
+              : ""
+          }
         />
       </svg>
     )

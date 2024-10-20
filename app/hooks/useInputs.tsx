@@ -67,6 +67,11 @@ export const useInputs = ({
       butterfly.inputs[i]?.txid === ordinal?.txid &&
       butterfly.inputs[i]?.vout === ordinal?.vout
 
+    const hasNegativeValues =
+      (butterfly.outputs[i]?.value || 0) < 0 ||
+      (butterfly.outputs[i]?.runesValue &&
+        (butterfly.outputs[i]?.runesValue || 0) < 0)
+
     const stop1Color = isRune
       ? "#FF61F6"
       : isInscription
@@ -164,29 +169,16 @@ export const useInputs = ({
         className="absolute right-[-12px] transform translate-y-[-50%] pointer-events-none"
         style={{ top: "calc(50% + 40px)" }}
       >
-        {(!isNotReady && isConfirmDisabled && !butterflyIsOk) ||
-          (((isConfirmDisabled && !butterflyIsOk && isNotReady) ||
-            (!feeRateOk && Boolean(butterfly.outputs.length))) && (
-            <div
-              className="mb-[90px]  rounded-full overflow-hidden pointer-events-none bg-black"
-              style={{ width: "36px", height: "36px" }}
-            >
-              <Image
-                src="/satonomy-logo.png"
-                alt="Satonomy"
-                width={36}
-                height={36}
-                className="object-cover pointer-events-none" // Slightly scale the image up
-              />
-            </div>
-          ))}
-        {butterflyIsOk && !isConfirmDisabled && feeRateOk && (
+        {((!isNotReady && isConfirmDisabled && !butterflyIsOk) ||
+          (isConfirmDisabled && !butterflyIsOk && isNotReady) ||
+          (!feeRateOk && Boolean(butterfly.outputs.length)) ||
+          hasNegativeValues) && (
           <div
-            className="mb-[80px]  rounded-full overflow-hidden pointer-events-none"
+            className="mb-[90px]  rounded-full overflow-hidden pointer-events-none bg-black"
             style={{ width: "36px", height: "36px" }}
           >
             <Image
-              src="/satonomy-green-3.png"
+              src="/satonomy-logo.png"
               alt="Satonomy"
               width={36}
               height={36}
@@ -194,6 +186,23 @@ export const useInputs = ({
             />
           </div>
         )}
+        {butterflyIsOk &&
+          !isConfirmDisabled &&
+          feeRateOk &&
+          !hasNegativeValues && (
+            <div
+              className="mb-[80px]  rounded-full overflow-hidden pointer-events-none"
+              style={{ width: "36px", height: "36px" }}
+            >
+              <Image
+                src="/satonomy-green-3.png"
+                alt="Satonomy"
+                width={36}
+                height={36}
+                className="object-cover pointer-events-none" // Slightly scale the image up
+              />
+            </div>
+          )}
         {/* {((isConfirmDisabled && !butterflyIsOk && isNotReady) ||
           (!feeRateOk && Boolean(butterfly.outputs.length))) && (
           <div
@@ -217,26 +226,33 @@ export const useInputs = ({
         className="absolute right-[-12px] transform translate-y-[-50%] pointer-events-none"
         style={{ top: "calc(50% + 40px)" }}
       >
-        {!isNotReady && isConfirmDisabled && !butterflyIsOk && (
-          <Image
-            src="/satonomy-logo.png"
-            alt="Satonomy"
-            width={36}
-            height={36}
-            className="mb-[80px] animate-ping-3 duration-10000 pointer-events-none"
-          />
-        )}
+        {!isNotReady &&
+          isConfirmDisabled &&
+          !butterflyIsOk &&
+          !hasNegativeValues && (
+            <Image
+              src="/satonomy-logo.png"
+              alt="Satonomy"
+              width={36}
+              height={36}
+              className="mb-[80px] animate-ping-3 duration-10000 pointer-events-none"
+            />
+          )}
 
-        {butterflyIsOk && !isConfirmDisabled && feeRateOk && (
-          <Image
-            src="/satonomy-green.png"
-            alt="Satonomy"
-            width={36}
-            height={36}
-            className="mb-[80px] animate-ping-3 duration-10000 pointer-events-none"
-          />
-        )}
-        {isConfirmDisabled && !butterflyIsOk && isNotReady && (
+        {butterflyIsOk &&
+          !isConfirmDisabled &&
+          feeRateOk &&
+          !hasNegativeValues && (
+            <Image
+              src="/satonomy-green.png"
+              alt="Satonomy"
+              width={36}
+              height={36}
+              className="mb-[80px] animate-ping-3 duration-10000 pointer-events-none"
+            />
+          )}
+        {((isConfirmDisabled && !butterflyIsOk && isNotReady) ||
+          hasNegativeValues) && (
           <Image
             src="/satonomy-red.png"
             alt="Satonomy"

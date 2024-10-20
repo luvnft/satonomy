@@ -27,10 +27,19 @@ export async function POST(request: NextRequest) {
     }
 
     const psbt = await psbtService.createPsbtFull(newButterfly, address)
-    const feeCost = psbtService.calculateTransactionFee(psbt, feeRate)
+    console.log("✌️psbt --->", psbt)
+    if (psbt) {
+      const feeCost = psbtService.calculateTransactionFee(psbt, feeRate)
+      return NextResponse.json(feeCost, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    }
 
-    return NextResponse.json(feeCost, {
-      status: 200,
+    return NextResponse.json(false, {
+      status: 400,
       headers: {
         "Content-Type": "application/json",
       },

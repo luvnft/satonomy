@@ -201,10 +201,30 @@ export const NetworkFee = () => {
         feeRateLessThan2 ? "Fee must be higher than 2 sats/vb 🚨" : ""
       }
       data-tooltip-place="left"
-      className={`transition-all duration-1000  pb-6 pt-6 min-w-52  rounded-xl flex flex-col gap-1 items-center justify-start border bg-zinc-950 ${
+      className={`relative transition-all duration-1000  pb-6 pt-6 min-w-52  rounded-xl flex flex-col gap-1 items-center justify-start border bg-zinc-950 ${
         feeRateLessThan2 ? "border-red-500 " : ""
       }`}
     >
+      <div
+        className="absolute inset-0 rounded-xl z-[-1]"
+        style={
+          !feeRateLessThan2 && configs.feeCost && configs.feeRateEstimated
+            ? {
+                margin: "-3px", // Adjust to match the border thickness
+                padding: "4px", // Adjust to match the border thickness
+                background: `linear-gradient(180deg, #FF8A00 0%, #FF8A00 50%, #FAF22E 95%, #FAF22E 115%)`,
+                borderRadius: "inherit", // Ensure the radius matches the card's radius
+              }
+            : undefined
+        }
+      >
+        <div
+          className="w-full h-full rounded-xl bg-zinc-900"
+          style={{
+            borderRadius: "inherit",
+          }}
+        ></div>
+      </div>
       <Image
         className="w-14 h-14"
         src="/bitcoin.png"

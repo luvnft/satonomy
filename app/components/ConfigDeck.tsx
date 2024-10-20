@@ -154,7 +154,7 @@ export const ConfigDeck = () => {
             false
           )} sats; it should be 0.`
       : "Create PSBT and sign"
-    : "No UTXOs"
+    : "No Bitcoin Assets (UTXOs)"
 
   const onClose = () => {
     setConfigs((prev) => ({
@@ -308,8 +308,6 @@ export const ConfigDeck = () => {
           )
         }
 
-        // update utxos used
-
         toast.success("Broadcast Successfully", toastOptions)
       } else {
         track("error-broadcast", { wallet: account })
@@ -332,39 +330,33 @@ export const ConfigDeck = () => {
       fullDeckSearchWallet: "",
     }))
     setPsbtSigned({ inputsSigned: [], psbtHexSigned: "" })
-    // remove params from url
     window.history.replaceState({}, "", "/")
 
     track("resetButterfly", {}, { flags: ["resetButterfly"] })
   }
 
   const onPortfolioClick = () => {
-    if (configs.isInputDeckOpen || configs.isOutputDeckOpen) {
-      setConfigs((prev) => ({
-        ...prev,
-        isInputDeckOpen: false,
-        isOutputDeckOpen: false,
-        isInputFullDeckOpen: true,
-      }))
+    track(
+      "portfolio",
+      {
+        wallet: account,
+        utxos: utxos?.length || 0,
+      },
+      { flags: ["portfolio"] }
+    )
 
-      return
-    }
-
-    track("portfolio", {}, { flags: ["portfolio"] })
     setConfigs((prev) => ({
       ...prev,
-      isInputFullDeckOpen:
-        (utxos?.length || 0) >= 20 || prev.isInputDeckOpen
-          ? !prev.isInputFullDeckOpen
-          : false,
-      isInputDeckOpen:
-        (utxos?.length || 0) < 20 ? !prev.isInputDeckOpen : false,
+      isInputDeckOpen: false,
+      isOutputDeckOpen: false,
+      isInputFullDeckOpen: true,
     }))
   }
 
   return (
     <div
-      className={`z-10 fixed flex gap-2 ${position} w-full items-center justify-center`}
+      style={{ zIndex: 99 }}
+      className={` fixed flex gap-2 ${position} w-full items-center justify-center`}
     >
       {Boolean(utxos?.length) &&
         (isDeckOpen || configs.isInputFullDeckOpen) && (
@@ -377,12 +369,9 @@ export const ConfigDeck = () => {
                 isInputFullDeckOpen: false,
               }))
             }
-            className="absolute left-2 rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 py-2 px-4 border-2 border-b-0 border-zinc-600 flex flex-col cursor-pointer hover:bg-zinc-800 hover:border-zinc-500 transition-all duration-200 transform opacity-0 translate-y-4 animate-fade-slide"
+            className="z-[-1] h-16 mb-[-14px] absolute left-2 rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 py-2 px-4 border-2 border-b-0 border-zinc-600 flex flex-col cursor-pointer hover:bg-zinc-800 hover:border-zinc-500 transition-all duration-200 transform opacity-0 translate-y-4 animate-fade-slide"
           >
-            <div className="text-[12px] flex items-center justify-center opacity-50">
-              esc
-            </div>
-            <div className="flex justify-center items-center">Close</div>
+            ↓
           </div>
         )}
 
@@ -411,7 +400,8 @@ export const ConfigDeck = () => {
         </button>
       )}
 
-      {!isConfirmDisabled &&
+      {configs.proMode &&
+        !isConfirmDisabled &&
         Boolean(configs.feeCost) &&
         !configs.isInputFullDeckOpen &&
         !configs.isOutputDeckOpen &&
@@ -438,42 +428,52 @@ export const ConfigDeck = () => {
 
       {Boolean(utxos?.length) && (
         <div
-          className={`transition-all duration-200 transform opacity-0 translate-y-4 animate-fade-slide w-[300px] rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 hover:bg-zinc-800 py-2 px-6 border-2 border-zinc-600 hover:border-zinc-500 cursor-pointer`}
+          className={` transition-all duration-200 transform opacity-0 translate-y-4 animate-fade-slide w-[300px] rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 hover:bg-zinc-800 py-2 px-6 border-2 border-zinc-600 hover:border-zinc-500 cursor-pointer ${
+            configs.isInputDeckOpen ? "hidden" : ""
+          }`}
           onClick={onPortfolioClick}
         >
           <div className="text-[12px] flex items-center justify-center opacity-50">
-            {utxos?.length} UTXOs
+            {utxos?.length} Assets
           </div>
           <div className="flex gap-2 justify-center items-center px-2">
-            <Image src="/bitcoin.png" alt="Bitcoin" width={24} height={24} />
-            <span className="whitespace-nowrap">
-              {utxos?.length
-                ? utxos.reduce((acc, utxo) => acc + utxo.value, 0) / 100000000
-                : `0.000000000`}{" "}
-              BTC
-            </span>
-
-            {hasWalletLoading && (
-              <div
-                className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-[#6839B6] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                role="status"
-              >
-                <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                  Loading...
+            {configs.isInputFullDeckOpen ? (
+              <>
+                <Image
+                  src="/bitcoin.png"
+                  alt="Bitcoin"
+                  width={24}
+                  height={24}
+                />
+                <span className="whitespace-nowrap">
+                  {utxos?.length
+                    ? utxos.reduce((acc, utxo) => acc + utxo.value, 0) /
+                      100000000
+                    : `0.000000000`}{" "}
+                  BTC
                 </span>
-              </div>
+
+                {hasWalletLoading && (
+                  <div
+                    className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-[#6839B6] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status"
+                  >
+                    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                      Loading...
+                    </span>
+                  </div>
+                )}
+              </>
+            ) : (
+              <span className="whitespace-nowrap">Open Portfolio</span>
             )}
+
             {!hasWalletLoading && (
               <Image
-                src="/wallet.png"
-                alt="Arrow"
-                width={16}
-                height={16}
-                style={{
-                  transform: !configs.isInputFullDeckOpen
-                    ? ""
-                    : "rotate(180deg)",
-                }}
+                src="/card-games-3.png"
+                alt="UTXO Deck of Cards"
+                width={20}
+                height={20}
               />
             )}
           </div>
@@ -491,7 +491,7 @@ export const ConfigDeck = () => {
         </div>
       )} */}
 
-      {Boolean(configs.feeCost) && isConfirmDisabled && (
+      {/* {Boolean(configs.feeCost) && isConfirmDisabled && (
         <div className="w-[160px] rounded-tl-[20px] rounded-tr-[20px] bg-zinc-900 py-2 px-4 border-2 border-zinc-600 hidden sm:flex flex-col opacity-50">
           <div className="text-[12px] flex items-center justify-center opacity-50 whitespace-nowrap">
             Balance
@@ -516,7 +516,7 @@ export const ConfigDeck = () => {
             </div>
           )}
         </div>
-      )}
+      )} */}
 
       {Boolean(configs.feeCost) && (
         <>
@@ -532,7 +532,7 @@ export const ConfigDeck = () => {
             className="max-w-[250px] bg-gray-600"
             style={{ backgroundColor: "#292929", color: "white" }}
           />
-          {!allTxIsSigned && userCanSign && (
+          {!allTxIsSigned && userCanSign && !configs.isInputFullDeckOpen && (
             <button
               data-tooltip-id={"confirm-2"}
               data-tooltip-content={confirmTooltip}

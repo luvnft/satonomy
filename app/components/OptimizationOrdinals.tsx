@@ -11,7 +11,6 @@ import { MempoolUTXO, utxoAtom } from "@/app/recoil/utxoAtom"
 
 import { formatNumber } from "@/app/utils/format"
 import { useAccounts } from "@particle-network/btc-connectkit"
-import { track } from "@vercel/analytics"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
@@ -160,7 +159,7 @@ export const OptimizationOrdinals = ({
         })
         const result = await res.json()
 
-        if (!result?.error) {
+        if (result && !result?.error) {
           setFeeCost(result)
 
           const charge = allBtcInputsValue - 546 - result
@@ -266,8 +265,8 @@ export const OptimizationOrdinals = ({
 
   return (
     <button
-      data-tooltip-id={"Optimizations"}
-      data-tooltip-content={"Coming Soon"}
+      data-tooltip-id={"Extract locked sats"}
+      data-tooltip-content={"Extract ordinal"}
       data-tooltip-place="right"
       className={` flex justify-start items-start w-full h-full border p-2  ${
         !Boolean(profitInSats) || !Boolean(profitInUsd)

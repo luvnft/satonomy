@@ -1,4 +1,3 @@
-import { useParams } from "next/navigation"
 import {
   CARD_TYPES,
   CARD_TYPES_COLOR,
@@ -23,6 +22,8 @@ import { psbtSignedAtom } from "@/app/recoil/psbtAtom"
 import { loadingAtom } from "@/app/recoil/loading"
 import { favoritesAtom } from "@/app/recoil/favoritesAtom"
 import { isValidWallet } from "@/app/components/WalletConfigsModal"
+import { childFamily } from "@/app/recoil/childAtom"
+// import { ChildrenNodes } from "@/app/components/ChildrenNodes"
 
 export function generateBowtiePath(
   inputX: number,
@@ -71,7 +72,7 @@ export const EmptyCard = ({
               : `${
                   className
                     ? "Add a new output"
-                    : "Open the deck of UTXOs and select an Input"
+                    : "Open the deck of Bitcoin Assets (UTXOs) and select an Input"
                 }`
           }
           data-tooltip-place={className ? "left" : "right"}
@@ -603,6 +604,17 @@ export const CardOutput = ({
     (o) => (!o.address || !isValidWallet(o.address)) && o.type !== "OP RETURN"
   )
 
+  const bestBtcOutputAsNextInput =
+    butterfly.outputs.length - 1 === index &&
+    !rune &&
+    !ordinal &&
+    !isInscription &&
+    butterfly.outputs[butterfly.outputs.length - 1].value !== 546 &&
+    butterfly.outputs[butterfly.outputs.length - 1].value !== 330
+
+  const childKey = `${butterfly.outputs[index].vout}${butterfly.outputs[index].address}${butterfly.outputs[index].type}${butterfly.outputs[index].rune?.runeid}${butterfly.outputs[index].value}${butterfly.outputs[index].runesValue}`
+  const [children, setChildren] = useRecoilState(childFamily(childKey))
+
   if (butterfly.outputs[index]?.type === "OP RETURN" && rune) {
     return (
       <div className="relative min-w-52 bg-transparent rounded-xl  flex flex-col gap-3 items-center justify-center">
@@ -759,6 +771,20 @@ export const CardOutput = ({
     o.type === "runes" ? o.vout - 1 === index : o.vout === index
   )
 
+  const createNewTransaction = async () => {
+    try {
+      setChildren([
+        {
+          vout: butterfly.outputs[index].vout,
+          address: butterfly.outputs[index].address,
+          value: butterfly.outputs[index].value,
+        },
+      ])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="relative max-w-52 min-w-52 bg-transparent rounded-xl  flex flex-col gap-3 items-center justify-center">
       <div className="absolute top-[-3px] right-[-3px] pointer-events-none">
@@ -832,6 +858,38 @@ export const CardOutput = ({
             REMOVE 🗑️
           </button>
         )}
+
+        {/* {bestBtcOutputAsNextInput && (
+          <div className="absolute top-[120px] right-[-240px]">
+            {!children?.length && (
+              <div
+                className="opacity-50 hover:opacity-100 cursor-pointer"
+                onClick={createNewTransaction}
+              >
+                Create new transaction →
+              </div>
+            )}
+            {children?.length && (
+              <div className="absolute right-[-20px] w-full flex min-w-[200px] flex-end items-end justify-end">
+                <div className="w-full h-1 bg-orange-400 flex min-w-[200px]"></div>
+                <div className="relative">
+                  <div className="absolute top-[-14px] right-[-100px] flex items-center justify-center">
+                    Not signed
+                    <div className="relative">
+                      <div className="left-4 absolute w-full h-1 bg-orange-400 flex flex-end min-w-[200px] justify-end items-center">
+                        <div className="absolute left-[400px] w-[500px]">
+                          <div>
+                            <ChildrenNodes children={children} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )} */}
       </div>
       {rune && (
         <>

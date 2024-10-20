@@ -1,31 +1,19 @@
+import { AirdropRunes } from "@/app/components/AirdropRunes"
 import { HistoryModal } from "@/app/components/HistoryModal"
 import { Optimizations } from "@/app/components/Optimizations"
 
 import { configsAtom } from "@/app/recoil/confgsAtom"
-import { recommendedFeesAtom } from "@/app/recoil/recommendedFeesAtom"
 import dynamic from "next/dynamic"
 import Image from "next/image"
-import { useState } from "react"
 import { Tooltip } from "react-tooltip"
-import { useRecoilState, useRecoilValue } from "recoil"
+import { useRecoilState } from "recoil"
 
 const ConnectButton = dynamic(() => import("./Connect"), {
   ssr: false,
 })
 
 export const NavBar = () => {
-  const recommendedFees = useRecoilValue(recommendedFeesAtom)
-  // const [clicked, setClicked] = useState(0)
   const [configs, setConfig] = useRecoilState(configsAtom)
-  const hourFee = recommendedFees?.halfHourFee
-
-  // const onGasClick = () => {
-  //   setClicked(clicked + 1)
-  //   if (clicked > 5) {
-  //     setConfig((old) => ({ ...old, notConfirmed: true }))
-  //     alert("UTXO Unconfirmed Activated")
-  //   }
-  // }
 
   const onRefreshClick = () => {
     localStorage.clear()
@@ -52,7 +40,7 @@ export const NavBar = () => {
             </div>
             <span className=" text-[12px] opacity-70 font-normal hidden sm:flex">
               {" "}
-              Manage Bitcoin Transactions
+              Manage Your Bitcoin Assets
             </span>
           </div>
         </div>
@@ -65,12 +53,12 @@ export const NavBar = () => {
               "Refresh the app, delete local data, clean history and disconnect wallets."
             }
             data-tooltip-place="bottom"
-            // href={`${window.location.origin}`}
             className="cursor-pointer border-[1px] border-zinc-600 rounded p-1 hover:scale-105 transition-all duration-300 opacity-50"
           >
             <Image src="/refresh.png" width={16} height={16} alt="Refresh" />
           </div> */}
 
+          <AirdropRunes />
           <Optimizations />
           <div
             onClick={() => {

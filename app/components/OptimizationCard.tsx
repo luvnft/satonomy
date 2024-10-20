@@ -8,7 +8,6 @@ import { RunesUtxo } from "@/app/recoil/runesAtom"
 import { MempoolUTXO, utxoAtom } from "@/app/recoil/utxoAtom"
 
 import { formatNumber } from "@/app/utils/format"
-import { useAccounts } from "@particle-network/btc-connectkit"
 import { track } from "@vercel/analytics"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -38,7 +37,7 @@ export const OptimizationCard = ({
   const [feeCost, setFeeCost] = useState<number>(500)
   const { referrer } = useParams()
 
-  const selectedFeeRate = configs.feeRate || recommendedFeeRate?.hourFee
+  const selectedFeeRate = configs.feeRate || 3
 
   const profitMocked = length * 546 - feeCost - 546
 
@@ -48,10 +47,6 @@ export const OptimizationCard = ({
 
   useEffect(() => {
     if (!rune) return
-
-    const utxosSorted = (
-      JSON.parse(JSON.stringify(utxos)) as MempoolUTXO[]
-    )?.sort((a, b) => a.value - b.value)
 
     let allBtcInputsValue = rune.utxos.reduce(
       (acc, curr) =>
@@ -73,7 +68,6 @@ export const OptimizationCard = ({
 
     const usersProfit = Math.floor(charge * 0.8)
     const platformFee = Math.floor(charge - usersProfit)
-
     setProfit(usersProfit)
 
     const fetchFees = async () => {
