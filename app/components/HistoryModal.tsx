@@ -27,11 +27,11 @@ export const HistoryModal = () => {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <div className="w-full h-full flex flex-col max-w-[580px]">
-          <Tooltip
+          {/* <Tooltip
             id={`tooltip-wallets`}
             className="max-w-[210px] bg-gray-600 text-[12px] pr-0 z-91"
             style={{ backgroundColor: "#292929", color: "white" }}
-          />
+          /> */}
 
           <h2 className="mb-2 text-2xl">Transaction History</h2>
           <div className="mb-6 text-zinc-500">

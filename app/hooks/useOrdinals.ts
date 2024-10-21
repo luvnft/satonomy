@@ -1,3 +1,4 @@
+import { errorsAtom } from "@/app/recoil/errors"
 import { Ordinals, ordinalsAtom } from "@/app/recoil/ordinalsAtom"
 import { walletConfigsAtom } from "@/app/recoil/walletConfigsAtom"
 import { filterBitcoinWallets } from "@/app/utils/filters"
@@ -10,7 +11,7 @@ export const useOrdinals = () => {
   const setOrdinals = useSetRecoilState(ordinalsAtom)
   const { accounts } = useAccounts()
   const walletConfigs = useRecoilValue(walletConfigsAtom)
-
+  const setErrors = useSetRecoilState(errorsAtom)
   const wallets = [...walletConfigs.wallets, ...accounts]
 
   // Store fetched wallets to prevent fetching them again
@@ -37,6 +38,13 @@ export const useOrdinals = () => {
 
           if (data) {
             newOrdinals.push(data)
+
+            if (data?.inscription.length > 400) {
+              setErrors((prev) => ({
+                ...prev,
+                walletErrorList: [...prev.walletErrorList, wallet],
+              }))
+            }
           }
         } catch (error) {
           console.error(`Error fetching ordinals for wallet ${wallet}:`, error)
