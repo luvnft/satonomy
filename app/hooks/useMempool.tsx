@@ -96,13 +96,13 @@ export const useMempool = () => {
 
       if (allUtxos.length) {
         setUtxo(allUtxos as [])
-        setErrors((prev) => ({
-          walletErrorList: [
-            ...prev.walletErrorList.filter((w) => !wallets.includes(w)),
-          ],
-        }))
+        // console.log("CLEAN ERRORS ✌️allUtxos --->", allUtxos)
+        // setErrors((prev) => ({
+        //   walletErrorList: [
+        //     ...prev.walletErrorList.filter((w) => !wallets.includes(w)),
+        //   ],
+        // }))
       } else {
-        // setUtxo(null)
         setLoading((prev) => ({
           ...prev,
           walletLoadingList: [],

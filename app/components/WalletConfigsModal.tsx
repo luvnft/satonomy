@@ -43,7 +43,7 @@ const WalletInput = ({
       return "Loading..."
     }
     if (hasError) {
-      return "Too many UTXOs or something else"
+      return "Too many UTXOs, try another wallet."
     }
     return `☑️ ${
       utxos?.filter((u) => u.wallet === wallet).length || 0
@@ -330,7 +330,7 @@ export const WalletConfigsModal = ({
         >
           <Tooltip
             id={`tooltip-wallets`}
-            className="max-w-[210px] bg-gray-600 text-[12px] pr-0 z-91"
+            className="max-w-[210px] bg-gray-600 text-[12px] pr-0 z-9"
             style={{ backgroundColor: "#292929", color: "white" }}
           />
 

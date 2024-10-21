@@ -35,7 +35,7 @@ export const NavBar = () => {
               SATONOMY
               <span className="text-[12px] opacity-50 hidden sm:flex">
                 {" "}
-                (Beta)
+                Beta 1.0.16
               </span>
             </div>
             <span className=" text-[12px] opacity-70 font-normal hidden sm:flex">
